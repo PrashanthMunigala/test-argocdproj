@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: otel-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    spec.ingressClassName: nginx
+#  changed - as it is depracted "kubernetes.io/ingress.class"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - "otelapp.prashanthmunigala.xyz"
+    secretName: nginx-tls-default
+  rules:
+  - host: otelapp.prashanthmunigala.xyz
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: opentelemetry-demo-frontendproxy
+            port:
+              number: 8080
